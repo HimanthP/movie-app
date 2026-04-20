@@ -22,23 +22,42 @@ const showMovies = (movies) => {
     const movieElement = document.createElement("div");
     movieElement.classList.add("movie");
     movieElement.innerHTML = `
-    <img src="${
-  poster_path
-    ? IMG_PATH + poster_path
-    : "https://via.placeholder.com/300x450?text=No+Image"
-}"
-    <div class="movie-info">
-      <h3>${title}</h3>
-      <span class="${getClassByRate(vote_average)}">${vote_average}</span>
-    </div>
-    <div class="overview">
-      <h3>Overview</h3>
-      ${overview}
-    </div>
-  `;
+  <img src="${
+    poster_path
+      ? IMG_PATH + poster_path
+      : "https://via.placeholder.com/300x450?text=No+Image"
+  }" alt="${title}" />
+
+  <div class="movie-info">
+    <h3>${title}</h3>
+    <span class="${getClassByRate(vote_average)}">${vote_average}</span>
+  </div>
+
+  <button class="watchlist-btn">Add to Watchlist</button>
+
+  <div class="overview">
+    <h3>Overview</h3>
+    ${overview}
+  </div>
+`;
     main.appendChild(movieElement);
   });
 };
+
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("watchlist-btn")) {
+    const movieTitle =
+      e.target.parentElement.querySelector("h3").innerText;
+
+    let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+
+    if (!watchlist.includes(movieTitle)) {
+      watchlist.push(movieTitle);
+      localStorage.setItem("watchlist", JSON.stringify(watchlist));
+      alert("Added to Watchlist");
+    }
+  }
+});
 
 const getMovies = async (url) => {
   main.innerHTML = "<h2>Loading...</h2>";
