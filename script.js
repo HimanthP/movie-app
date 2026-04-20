@@ -40,18 +40,37 @@ const showMovies = (movies) => {
 };
 
 const getMovies = async (url) => {
-  const res = await fetch(url);
-  const data = await res.json();
-  showMovies(data.results);
+  main.innerHTML = "<h2>Loading...</h2>";
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (!data.results || data.results.length === 0) {
+      main.innerHTML = "<h2>No results found</h2>";
+      return;
+    }
+
+    showMovies(data.results);
+  } catch (error) {
+    main.innerHTML = "<h2>Something went wrong</h2>";
+  }
 };
 
 getMovies(API_URL);
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const searchTerm = search.value;
-  if (searchTerm && searchTerm !== "") {
-    getMovies(SEARCH_API + searchTerm);
-    search.value = "";
-  } else history.go(0);
+let timeout = null;
+
+search.addEventListener("input", (e) => {
+  clearTimeout(timeout);
+
+  timeout = setTimeout(() => {
+    const searchTerm = e.target.value;
+
+    if (searchTerm && searchTerm !== "") {
+      getMovies(SEARCH_API + searchTerm);
+    } else {
+      getMovies(API_URL);
+    }
+  }, 500);
 });
