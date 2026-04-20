@@ -19,3 +19,9 @@ A simple movie search app using TMDb API.
 
 ## Note
 API key is included for demo purposes only.
+
+## Features
+- Real-time movie search
+- Loading & error handling
+- Debounced search input
+- Watchlist using localStorage
