@@ -22,10 +22,11 @@ const showMovies = (movies) => {
     const movieElement = document.createElement("div");
     movieElement.classList.add("movie");
     movieElement.innerHTML = `
-    <img
-      src="${IMG_PATH + poster_path}"
-      alt="${title}"
-    />
+    <img src="${
+  poster_path
+    ? IMG_PATH + poster_path
+    : "https://via.placeholder.com/300x450?text=No+Image"
+}"
     <div class="movie-info">
       <h3>${title}</h3>
       <span class="${getClassByRate(vote_average)}">${vote_average}</span>
